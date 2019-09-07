@@ -1,0 +1,13 @@
+Flask>=0.10.1
+mysql-connector-python-rf>=2.2.2
+enum34>=1.1.2
+jimit>=0.62
+requests>=2.9.1
+PyJWT>=1.4.1
+Flask-Session>=0.3.0
+IPy>=0.83
+gunicorn
+gevent
+redis<3
+websockify
+werkzeug

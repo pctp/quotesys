@@ -1,0 +1,36 @@
+#UTF-8
+#此服务单元的路径必须是(不能是软连接)
+# /etc/systemd/system/awp.service
+#[注意]对于此服务的操作：启动/停止/重启/设置自动启动/取消自动启动，
+#      实际上总是同时自动伴随着另外两个服务的相同操作
+#
+#启动此服务
+# systemctl start awp
+#停止此服务
+# systemctl stop awp
+#
+#将此服务设为开机自动启动
+# systemctl enable awp.service
+#撤销此服务的开机自动启动
+# systemctl disable awp.service
+#
+
+[Unit]
+BindsTo=data_arrange_engine.service ctp_data_collect_engine.service
+Requisite=network-online.target data_arrange_engine.service ctp_data_collect_engine.service
+After=network-online.target network.target
+
+[Install]
+WantedBy=multi-user.target
+Also=data_arrange_engine.service ctp_data_collect_engine.service
+
+[Service]
+Type=idle
+RestartSec=2s
+#工作目录
+WorkingDirectory=/var/log
+#命令行(必须使用绝对路径)
+ExecStart=/path/to/main.py
+#启动或者停止服务最大允许花费60秒
+TimeoutSec=60s
+

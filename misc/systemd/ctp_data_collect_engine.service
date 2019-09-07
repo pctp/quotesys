@@ -1,0 +1,27 @@
+#UTF-8
+#此服务单元的路径必须是(不能是软连接)
+# /etc/systemd/system/ctp_data_collect_engine.service
+#[注意]此服务单元仅为配合 awp.service 的使用而存在，请勿直接操作此服务单元
+
+[Unit]
+Requisite=network-online.target
+After=network-online.target network.target
+BindsTo=awp.service
+PartOf=awp.service
+StopWhenUnneeded=yes
+RefuseManualStart=yes
+RefuseManualStop=yes
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=idle
+RestartSec=2s
+#工作目录
+WorkingDirectory=/var/log
+#命令行(必须使用绝对路径)
+ExecStart=/path/to/ctp_data_collect_engine.py
+#启动或者停止服务最大允许花费60秒
+TimeoutSec=60s
+
