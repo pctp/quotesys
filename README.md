@@ -2,7 +2,7 @@
 <img height="200" src="./misc/awp.png">
 </p>
 
-# awp
+# awp quotesys
 quotesys 是期货行情服务器，负责从数据接口采集tick数据，然后根据既定的规则生成需要的K线数据。
 
 安装：
