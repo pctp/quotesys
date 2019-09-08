@@ -26,5 +26,9 @@ quotesys 是期货行情服务器，负责从数据接口采集tick数据，然�
 
 4、在程序中获取数据 请使用 function.py 的load_data_from_server函数
 
+5、历史tick数据导入，请使用  	push_to_queue.py 目前支持从tb导出的tick数据，或者tqsdk下载的tick数据。
 
 
+系统目前在ubuntu　18.04, majaro 18　测试通过。暂时不支持windows.
+
+windows 的用户可以使用本地文件的版本。
