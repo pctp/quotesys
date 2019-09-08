@@ -22,12 +22,12 @@ class Rules(Enum):
     LIMIT = (REG_NUMBER, 'limit')
     PAGE = (REG_NUMBER, 'page')
     PAGE_SIZE = (REG_NUMBER, 'page_size')
-    ORDER_BY = (basestring, 'order_by', (1, 30))
-    ORDER = (basestring, 'order', ['asc', 'desc'])
-    KEYWORD = (basestring, 'keyword')
+    ORDER_BY = (str, 'order_by', (1, 30))
+    ORDER = (str, 'order', ['asc', 'desc'])
+    KEYWORD = (str, 'keyword')
 
     ID = (REG_NUMBER, 'id')
     IDS = (REG_NUMBERS, 'ids')
 
-    TOKEN = (basestring, 'token')
+    TOKEN = (str, 'token')
 

@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-from rules import (
+from .rules import (
     Rules
 )
 
-from utils import (
+from .utils import (
     Utils
 )
 

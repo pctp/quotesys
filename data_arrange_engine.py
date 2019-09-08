@@ -165,7 +165,7 @@ class DataArrangeEngine(object):
             log = u'granularities 需为 list 格式'
             logger.warning(msg=log)
             return
-
+        print(awp_tick)
         action_day = awp_tick['action_day']
         update_time = awp_tick['update_time']
 
@@ -186,7 +186,7 @@ class DataArrangeEngine(object):
 
     @classmethod
     def launch(cls):
-        workdays = TradingPeriod.get_workdays(begin='2016-12-31', end='2018-10-07')
+        workdays = TradingPeriod.get_workdays(begin='2016-12-31', end='2020-10-07')
         workdays_exchange_trading_period_by_ts = \
             TradingPeriod.get_workdays_exchange_trading_period(
                 _workdays=workdays, exchange_trading_period=EXCHANGE_TRADING_PERIOD)
@@ -207,6 +207,8 @@ class DataArrangeEngine(object):
                     continue
 
                 awp_tick = json.loads(awp_tick)
+
+                print(awp_tick)
 
                 # 过滤交易量为 0 的假数据
                 if 'volume' in awp_tick and awp_tick['volume'] == 0:
