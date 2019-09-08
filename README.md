@@ -31,4 +31,4 @@ quotesys 是期货行情服务器，负责从数据接口采集tick数据，然�
 
 系统目前在ubuntu　18.04, majaro 18　测试通过。暂时不支持windows.
 
-windows 的用户可以使用本地文件的版本。
+windows 的用户可以使用本地文件的版本 	data_sewing_machine.py 即可。
