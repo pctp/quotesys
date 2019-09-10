@@ -22,16 +22,16 @@ def incept_config():
     }
 
     def usage():
-        print "Usage:%s [-s] [--data_source]" % sys.argv[0]
-        print "-o --output_file, is the output file. optional."
-        print "-i --interval, default is 2 minutes, delimiter is a comma. optional."
+        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print("-o --output_file, is the output file. optional.")
+        print("-i --interval, default is 2 minutes, delimiter is a comma. optional.")
 
     opts = None
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'ho:i:',
                                    ['help', 'output_file=', 'interval='])
     except getopt.GetoptError as e:
-        print str(e)
+        print(str(e))
         usage()
         exit(e.message.__len__())
 
@@ -47,7 +47,7 @@ def incept_config():
             config['interval'] = v
 
         else:
-            print "unhandled option"
+            print("unhandled option")
 
     if 'output_file' not in config:
         config['output_file'] = '_'.join([os.path.basename(
@@ -64,7 +64,7 @@ def run():
     save_path = os.path.join(os.getcwd(), config['output_file'])
 
     if not os.path.isdir(os.path.dirname(save_path)):
-        os.makedirs(os.path.dirname(save_path), 0755)
+        os.makedirs(os.path.dirname(save_path), 0o755)
 
     i = 0
     k_line = None
@@ -76,7 +76,7 @@ def run():
 
         last_k_line = ps.get_message(timeout=1)
 
-        if last_k_line is None or not isinstance(last_k_line, basestring):
+        if last_k_line is None or not isinstance(last_k_line, str):
             continue
 
         try:

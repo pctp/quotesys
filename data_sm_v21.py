@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # this is for pypy
 
-import Queue
+import queue
 
 from utils.vtObject import VtTickData
 
@@ -25,11 +25,11 @@ __contact__ = 'james.iter.cn@gmail.com'
 __copyright__ = '(c) 2018 by James Iter.'
 
 
-q_depth_market_data = Queue.Queue()
+q_depth_market_data = queue.Queue()
 
 granularity = 180
 
-inst = [u'rb1901']
+inst = ['rb1901']
 
 def init_data():
     global data
@@ -49,19 +49,19 @@ class MyMdApi(MdApi):
         self.password = password
 
     def OnRspError(self, info, request_id, is_last):
-        print " Error: " + info
+        print(" Error: " + info)
 
     @staticmethod
     def is_error_rsp_info(info):
         if info.ErrorID != 0:
-            print "ErrorID=", info.ErrorID, ", ErrorMsg=", info.ErrorMsg
+            print("ErrorID=", info.ErrorID, ", ErrorMsg=", info.ErrorMsg)
         return info.ErrorID != 0
 
     def OnHeartBeatWarning(self, _time):
-        print "onHeartBeatWarning", _time
+        print("onHeartBeatWarning", _time)
 
     def OnFrontConnected(self):
-        print "OnFrontConnected:"
+        print("OnFrontConnected:")
         self.user_login(self.broker_id, self.investor_id, self.password)
 
     def user_login(self, broker_id, investor_id, password):
@@ -71,10 +71,10 @@ class MyMdApi(MdApi):
         ret = self.ReqUserLogin(req, self.request_id)
 
     def OnRspUserLogin(self, user_login, info, rid, is_last):
-        print "OnRspUserLogin", is_last, info
+        print("OnRspUserLogin", is_last, info)
 
         if is_last and not self.is_error_rsp_info(info):
-            print "get today's action day:", repr(self.GetTradingDay())
+            print("get today's action day:", repr(self.GetTradingDay()))
             self.subscribe_market_data(self.instruments)
 
     def subscribe_market_data(self, instruments):
@@ -100,7 +100,7 @@ def login():
     user.RegisterFront(ADDRESS_MD)
     user.Init()
 
-    print u'行情服务器登录成功'
+    print('行情服务器登录成功')
 
     bars = load_data_from_server(server_base='http://106.14.119.122', instruments_id=inst[0], granularity=granularity)
 
@@ -108,7 +108,7 @@ def login():
 
         if Utils.exit_flag:
             msg = 'Thread CTPDataCollectEngine say bye-bye'
-            print msg
+            print(msg)
             logger.info(msg=msg)
 
             return
@@ -138,17 +138,17 @@ def login():
 
                 ma_5 = ma(elements=high, step=5)
                 ma_10 = ma(elements=high, step=10)
-                print high
-                print ma_5
-                print ma_10
+                print(high)
+                print(ma_5)
+                print(ma_10)
                 cu = cross(ma_5, ma_10)
-                print cu
+                print(cu)
                 far = be_apart_from(cu)
-                print far
+                print(far)
 
 
 
-        except Queue.Empty as e:
+        except queue.Empty as e:
             pass
 
 

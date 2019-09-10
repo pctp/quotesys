@@ -1,12 +1,12 @@
 #encoding:utf-8
 import datetime
 from function import generate_ohlc_key
-import Queue
+import queue
 from datetime import datetime
 import time
 import decimal
 
-q_bar = Queue.Queue()
+q_bar = queue.Queue()
 nest = dict()
 int_instruments = ['rb', 'hc', 'ru', 'ni', 'cu']
 
@@ -57,7 +57,7 @@ def tickToBar(tick, granularity = 180):
         nest[ohlc_key]['low'] = last_price
 
     if nest.__len__() > 1:
-        for k, v in nest.items():
+        for k, v in list(nest.items()):
             if k == ohlc_key:
                 continue
             q_bar.put(nest[k])

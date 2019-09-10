@@ -19,7 +19,7 @@ def incept_config():
     pattern = re.compile(r'\D*')
 
     def usage():
-        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print(("Usage:%s [-s] [--data_source]" % sys.argv[0]))
         print("-s --InstrumentID, Must include exchange ID., ex: SHFE.rb2001")
         print("-o --output_dir, is the output directory. optional.")
 

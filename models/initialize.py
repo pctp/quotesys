@@ -11,10 +11,11 @@ import sys
 import getopt
 import re
 import errno
+import importlib
 
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+importlib.reload(sys)
+#sys.setdefaultencoding('utf8')
 
 
 __author__ = 'James Iter'
@@ -53,14 +54,14 @@ class Init(object):
     def load_config(cls):
 
         def usage():
-            print "Usage:%s [-f] [--config_file]" % sys.argv[0]
+            print("Usage:%s [-f] [--config_file]" % sys.argv[0])
 
         opts = None
         try:
             opts, args = getopt.getopt(sys.argv[1:], 'hc:n:s:',
                                        ['help', 'config_file='])
         except getopt.GetoptError as e:
-            print str(e)
+            print(str(e))
             usage()
             exit(e.message.__len__())
 
@@ -74,7 +75,7 @@ class Init(object):
                 pass
 
         if not os.path.isfile(cls.config['config_file']):
-            raise SystemError(u'配置文件不存在, 请指明配置文件路径')
+            raise SystemError('配置文件不存在, 请指明配置文件路径')
 
         with open(cls.config['config_file'], 'r') as f:
             cls.config.update(json.load(f))
@@ -86,7 +87,7 @@ class Init(object):
         log_dir = os.path.dirname(cls.config['log_file_path'])
         if not os.path.isdir(log_dir):
             try:
-                os.makedirs(log_dir, 0755)
+                os.makedirs(log_dir, 0o755)
             except OSError as e:
                 # 如果配置文件中的日志目录无写入权限，则调整日志路径到本项目目录下
                 if e.errno != errno.EACCES:
@@ -96,9 +97,9 @@ class Init(object):
                 log_dir = os.path.dirname(cls.config['log_file_path'])
 
                 if not os.path.isdir(log_dir):
-                    os.makedirs(log_dir, 0755)
+                    os.makedirs(log_dir, 0o755)
 
-                print u'日志路径自动调整为 ' + cls.config['log_file_path']
+                print('日志路径自动调整为 ' + cls.config['log_file_path'])
 
         _logger = logging.getLogger(cls.config['log_file_path'])
 

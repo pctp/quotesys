@@ -28,7 +28,7 @@ class KLinePump(object):
         :return:
         """
 
-        assert isinstance(save_path, basestring)
+        assert isinstance(save_path, str)
 
         for key in ['last_price', 'trading_day', 'update_time']:
             if key not in depth_market_data:

@@ -20,17 +20,17 @@ def incept_config():
     }
 
     def usage():
-        print "Usage:%s [-s] [--data_source]" % sys.argv[0]
-        print "-s --data_source, is the path of data file."
-        print "-o --output_file, is the output file. optional."
-        print "-i --interval, default is 13 minutes, delimiter is a comma. optional."
+        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print("-s --data_source, is the path of data file.")
+        print("-o --output_file, is the output file. optional.")
+        print("-i --interval, default is 13 minutes, delimiter is a comma. optional.")
 
     opts = None
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'hs:o:i:',
                                    ['help', 'data_source=', 'output_file=', 'interval='])
     except getopt.GetoptError as e:
-        print str(e)
+        print(str(e))
         usage()
         exit(e.message.__len__())
 
@@ -49,10 +49,10 @@ def incept_config():
             config['interval'] = v
 
         else:
-            print "unhandled option"
+            print("unhandled option")
 
     if 'data_source' not in config:
-        print 'Must specify the -s(data_source) arguments.'
+        print('Must specify the -s(data_source) arguments.')
         usage()
         exit(1)
 
@@ -73,7 +73,7 @@ def run():
     save_path = os.path.join(os.getcwd(), config['output_file'])
 
     if not os.path.isdir(os.path.dirname(save_path)):
-        os.makedirs(os.path.dirname(save_path), 0755)
+        os.makedirs(os.path.dirname(save_path), 0o755)
 
     with open(config['data_source']) as f:
         k_line = None

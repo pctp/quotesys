@@ -23,7 +23,7 @@ def incept_config():
     pattern = re.compile(r'\D*')
 
     def usage():
-        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print(("Usage:%s [-s] [--data_source]" % sys.argv[0]))
         # print "-s --data_source, is the path of data file."
         print("-o --output_dir, is the output directory. optional.")
         print("-n --name, is the instrument id. optional.")
@@ -38,7 +38,7 @@ def incept_config():
                                    ['help', 'data_source=', 'output_dir=', 'name=', 'granularities=', 'begin=', 'end=',
                                     'offset='])
     except getopt.GetoptError as e:
-        print(str(e))
+        print((str(e)))
         usage()
         exit(e.message.__len__())
 
@@ -102,12 +102,12 @@ def run(instrumentid, period, exchangeId = 'SHFE'):
 
     while not kd.is_finished():
         api.wait_update()
-        print("progress: kline: %.2f%%" % kd.get_progress())
+        print(("progress: kline: %.2f%%" % kd.get_progress()))
 
 
 
 config = incept_config()
-print(config['name'], config['granularities'])
+print((config['name'], config['granularities']))
 
 run(instrumentid=config['name'], period=config['granularities'])
 

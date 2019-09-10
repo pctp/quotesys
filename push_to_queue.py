@@ -27,7 +27,7 @@ def incept_config():
     }
 
     def usage():
-        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print(("Usage:%s [-s] [--data_source]" % sys.argv[0]))
         print("-s --data_source, is the path of data file.")
         print("-n --name, is the instrument id. optional.")
         print("-g --granularities, default are 120,300,600,1800,3600 minutes, delimiter is a comma. optional.")
@@ -37,7 +37,7 @@ def incept_config():
         opts, args = getopt.getopt(sys.argv[1:], 'hs:n:g:',
                                    ['help', 'data_source=', 'name=', 'granularities='])
     except getopt.GetoptError as e:
-        print(str(e))
+        print((str(e)))
         usage()
         exit(e.message.__len__())
 
@@ -106,7 +106,7 @@ def run():
     for i, line in enumerate(lines):
 
         if i % 10000 == 0:
-            print(' '.join([time.strftime('%H:%M:%S'), i.__str__()]))
+            print((' '.join([time.strftime('%H:%M:%S'), i.__str__()])))
 
         awp_tick = {
             'instrument_id': config['instrument_id'],

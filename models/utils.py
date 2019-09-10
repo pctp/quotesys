@@ -4,7 +4,7 @@
 
 from functools import wraps
 
-import commands
+import subprocess
 
 from flask import make_response, g, request
 from flask.wrappers import Response
@@ -13,7 +13,7 @@ import jwt
 import jimit as ji
 
 from models.initialize import *
-from database import Database as db
+from .database import Database as db
 
 
 __author__ = 'James Iter'
@@ -30,7 +30,7 @@ class Utils(object):
     @staticmethod
     def shell_cmd(cmd):
         try:
-            exit_status, output = commands.getstatusoutput(cmd)
+            exit_status, output = subprocess.getstatusoutput(cmd)
 
             return exit_status, str(output)
 
@@ -52,7 +52,7 @@ class Utils(object):
         def _dumps2response(*args, **kwargs):
             ret = func(*args, **kwargs)
 
-            if func.func_name != 'r_before_request' and ret is None:
+            if func.__name__ != 'r_before_request' and ret is None:
                 ret = dict()
                 ret['state'] = ji.Common.exchange_state(20000)
 
@@ -113,7 +113,7 @@ class Utils(object):
                                      audience=audience)
 
             return payload
-        except jwt.InvalidTokenError, e:
+        except jwt.InvalidTokenError as e:
             logger.error(e.message)
         ret['state'] = ji.Common.exchange_state(41208)
         raise ji.JITError(json.dumps(ret))

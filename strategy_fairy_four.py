@@ -10,7 +10,7 @@ from data_sewing_machine import init_k_line_pump, get_k_line_column, DEPOSITARY_
 from data_sewing_machine import get_mac
 from trading_period import TradingPeriod, EXCHANGE_TRADING_PERIOD
 
-import Queue
+import queue
 
 if sys.platform == 'win32':
     from ctp_win32 import ApiStruct, MdApi, TraderApi
@@ -25,13 +25,13 @@ __contact__ = 'james.iter.cn@gmail.com'
 __copyright__ = '(c) 2018 by James Iter.'
 
 
-inst = [u'rb1805']
+inst = ['rb1805']
 BROKER_ID = '9999'
 INVESTOR_ID = '116667'
 PASSWORD = '110.com'
 ADDRESS_MD = 'tcp://180.168.146.187:10031'
 
-q_depth_market_data = Queue.Queue()
+q_depth_market_data = queue.Queue()
 
 
 class MyMdApi(MdApi):
@@ -44,19 +44,19 @@ class MyMdApi(MdApi):
         self.password = password
 
     def OnRspError(self, info, request_id, is_last):
-        print " Error: " + info
+        print(" Error: " + info)
 
     @staticmethod
     def is_error_rsp_info(info):
         if info.ErrorID != 0:
-            print "ErrorID=", info.ErrorID, ", ErrorMsg=", info.ErrorMsg
+            print("ErrorID=", info.ErrorID, ", ErrorMsg=", info.ErrorMsg)
         return info.ErrorID != 0
 
     def OnHeartBeatWarning(self, _time):
-        print "onHeartBeatWarning", _time
+        print("onHeartBeatWarning", _time)
 
     def OnFrontConnected(self):
-        print "OnFrontConnected:"
+        print("OnFrontConnected:")
         self.user_login(self.broker_id, self.investor_id, self.password)
 
     def user_login(self, broker_id, investor_id, password):
@@ -66,10 +66,10 @@ class MyMdApi(MdApi):
         ret = self.ReqUserLogin(req, self.request_id)
 
     def OnRspUserLogin(self, user_login, info, rid, is_last):
-        print "OnRspUserLogin", is_last, info
+        print("OnRspUserLogin", is_last, info)
 
         if is_last and not self.is_error_rsp_info(info):
-            print "get today's trading day:", repr(self.GetTradingDay())
+            print("get today's trading day:", repr(self.GetTradingDay()))
             self.subscribe_market_data(self.instruments)
 
     def subscribe_market_data(self, instruments):
@@ -85,7 +85,7 @@ def run():
     user.Create("data")
     user.RegisterFront(ADDRESS_MD)
     user.Init()
-    print u'行情服务器登录成功'
+    print('行情服务器登录成功')
 
     last_time = None
     up_trader_flag = False
@@ -107,22 +107,22 @@ def run():
                 if not up_trader_flag and payload.LastPrice > last_k_line['high']:
                     # 下多单
                     up_trader_flag = True
-                    print
-                    print u'下多单'
-                    print last_k_line
-                    print payload.LastPrice
+                    print()
+                    print('下多单')
+                    print(last_k_line)
+                    print(payload.LastPrice)
 
                 if not down_trader_flag and payload.LastPrice < last_k_line['low']:
                     # 下空单
                     down_trader_flag = True
-                    print
-                    print u'下空单'
-                    print last_k_line
-                    print payload.LastPrice
+                    print()
+                    print('下空单')
+                    print(last_k_line)
+                    print(payload.LastPrice)
 
-                print get_mac(instrument_id='rb1805', interval='120', mac='2c5')
+                print(get_mac(instrument_id='rb1805', interval='120', mac='2c5'))
 
-        except Queue.Empty as e:
+        except queue.Empty as e:
             pass
 
 
@@ -132,7 +132,7 @@ def macs_process():
             payload = q_macs.get(timeout=1)
             # print payload
 
-        except Queue.Empty as e:
+        except queue.Empty as e:
             pass
 
 

@@ -4,7 +4,7 @@
 
 from enum import Enum
 
-from initialize import regex_sql_str, regex_dsl_str
+from .initialize import regex_sql_str, regex_dsl_str
 
 
 __author__ = 'James Iter'
@@ -55,7 +55,7 @@ class Filter(object):
         keyword, operator, value = dsl.split(':', 2)
         operator = operator.lower()
 
-        if keyword not in allow_keywords.keys():
+        if keyword not in list(allow_keywords.keys()):
             return sql_stmt
         field_type = allow_keywords[keyword]
 

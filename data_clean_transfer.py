@@ -16,7 +16,7 @@ def incept_config():
     pattern = re.compile(r'\D*')
 
     def usage():
-        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print(("Usage:%s [-s] [--data_source]" % sys.argv[0]))
         print("-s --data_source, is the path of data file.")
         print("-o --output_dir, is the output directory. optional.")
         
@@ -25,7 +25,7 @@ def incept_config():
         opts, args = getopt.getopt(sys.argv[1:], 'hs:o:n:',
                                    ['help', 'data_source=', 'output_dir='])
     except getopt.GetoptError as e:
-        print(str(e))
+        print((str(e)))
         usage()
         exit(e.message.__len__())
 

@@ -4,7 +4,7 @@
 
 import sys
 from copy import deepcopy
-import Queue
+import queue
 import json
 
 from models import Utils
@@ -28,13 +28,13 @@ __copyright__ = '(c) 2018 by James Iter.'
 db.init_conn_redis()
 
 
-inst = [u'AP810', u'rb1810']
+inst = ['AP810', 'rb1810']
 BROKER_ID = '9999'
 INVESTOR_ID = '116667'
 PASSWORD = '110.com'
 ADDRESS_MD = 'tcp://180.168.146.187:10031'
 
-q_depth_market_data = Queue.Queue()
+q_depth_market_data = queue.Queue()
 
 granularities = [60, 120, 300, 600, 1800]
 
@@ -49,19 +49,19 @@ class MyMdApi(MdApi):
         self.password = password
 
     def OnRspError(self, info, request_id, is_last):
-        print " Error: " + info
+        print(" Error: " + info)
 
     @staticmethod
     def is_error_rsp_info(info):
         if info.ErrorID != 0:
-            print "ErrorID=", info.ErrorID, ", ErrorMsg=", info.ErrorMsg
+            print("ErrorID=", info.ErrorID, ", ErrorMsg=", info.ErrorMsg)
         return info.ErrorID != 0
 
     def OnHeartBeatWarning(self, _time):
-        print "onHeartBeatWarning", _time
+        print("onHeartBeatWarning", _time)
 
     def OnFrontConnected(self):
-        print "OnFrontConnected:"
+        print("OnFrontConnected:")
         self.user_login(self.broker_id, self.investor_id, self.password)
 
     def user_login(self, broker_id, investor_id, password):
@@ -71,10 +71,10 @@ class MyMdApi(MdApi):
         ret = self.ReqUserLogin(req, self.request_id)
 
     def OnRspUserLogin(self, user_login, info, rid, is_last):
-        print "OnRspUserLogin", is_last, info
+        print("OnRspUserLogin", is_last, info)
 
         if is_last and not self.is_error_rsp_info(info):
-            print "get today's action day:", repr(self.GetTradingDay())
+            print("get today's action day:", repr(self.GetTradingDay()))
             self.subscribe_market_data(self.instruments)
 
     def subscribe_market_data(self, instruments):
@@ -91,13 +91,13 @@ def login():
     user.RegisterFront(ADDRESS_MD)
     user.Init()
 
-    print u'行情服务器登录成功'
+    print('行情服务器登录成功')
 
     while True:
 
         if Utils.exit_flag:
             msg = 'Thread CTPDataCollectEngine say bye-bye'
-            print msg
+            print(msg)
             logger.info(msg=msg)
 
             return
@@ -115,10 +115,10 @@ def login():
                 'volume': payload.Volume
             }
 
-            print awp_tick
+            print(awp_tick)
             db.r.rpush(app.config['data_stream_queue'], json.dumps(awp_tick, ensure_ascii=False))
 
-        except Queue.Empty as e:
+        except queue.Empty as e:
             pass
 
 

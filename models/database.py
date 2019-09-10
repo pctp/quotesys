@@ -11,7 +11,7 @@ from mysql.connector import errorcode
 import time
 import jimit as ji
 
-from initialize import app, logger
+from .initialize import app, logger
 
 
 __author__ = 'James Iter'
@@ -43,9 +43,9 @@ class Database(object):
             )
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                e_msg = u'用户名或密码错误'
+                e_msg = '用户名或密码错误'
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                e_msg = u'数据库不存在'
+                e_msg = '数据库不存在'
             else:
                 e_msg = err.msg
 

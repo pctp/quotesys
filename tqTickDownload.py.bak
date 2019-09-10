@@ -19,16 +19,16 @@ def incept_config():
     pattern = re.compile(r'\D*')
 
     def usage():
-        print "Usage:%s [-s] [--data_source]" % sys.argv[0]
-        print "-s --InstrumentID, Must include exchange ID., ex: SHFE.rb2001"
-        print "-o --output_dir, is the output directory. optional."
+        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print("-s --InstrumentID, Must include exchange ID., ex: SHFE.rb2001")
+        print("-o --output_dir, is the output directory. optional.")
 
     opts = None
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'hs:o:n:',
                                    ['help', 'data_source=', 'output_dir='])
     except getopt.GetoptError as e:
-        print
+        print()
         str(e)
         usage()
         exit(e.message.__len__())
@@ -45,11 +45,11 @@ def incept_config():
             config['output_dir'] = v
 
         else:
-            print
+            print()
             "unhandled option"
 
     if 'data_source' not in config:
-        print
+        print()
         'Must specify the -s(data_source) arguments.'
         usage()
         exit(1)
@@ -77,19 +77,14 @@ def isinstidValid(instid):
 
     return False
 
-print(isinstidValid(instid))
+print((isinstidValid(instid)))
 
 
 def main():
 
     api = TqApi(TqSim())
-
-    inst = 'rb2001'
-    exchangeid = 'SHFE'
-    instid = ''.join([exchangeid, '.', inst])
-
+    inst = instid.split('.')[1]
     tickfile =inst+'tick.csv'
-    # interval = 60
     stdt = datetime(2016, 1, 1)
     eddt = datetime.now()
     # eddt = datetime(2018, 8, 30)
@@ -102,9 +97,9 @@ def main():
 
     while not td.is_finished():
         api.wait_update()
-        print("progress:  tick:%.2f%%" % td.get_progress())
+        print(("progress:  tick:%.2f%%" % td.get_progress()))
 
 
 if __name__ == "__main__":
-    pass
-    # main()
+    # pass
+    main()

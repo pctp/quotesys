@@ -157,12 +157,12 @@ class DataArrangeEngine(object):
         """
 
         if not isinstance(awp_tick, dict):
-            log = u' '.join([u'数据 --> ', str(awp_tick), u' 需为 json 格式'])
+            log = ' '.join(['数据 --> ', str(awp_tick), ' 需为 json 格式'])
             logger.warning(msg=log)
             return
 
         if 'granularities' not in awp_tick or not isinstance(awp_tick['granularities'], list):
-            log = u'granularities 需为 list 格式'
+            log = 'granularities 需为 list 格式'
             logger.warning(msg=log)
             return
         print(awp_tick)
@@ -194,7 +194,7 @@ class DataArrangeEngine(object):
         while True:
             if Utils.exit_flag:
                 msg = 'Thread DataArrangeEngine say bye-bye'
-                print msg
+                print(msg)
                 logger.info(msg=msg)
 
                 return

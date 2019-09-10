@@ -59,7 +59,7 @@ def r_after_request(response):
         response.headers['Access-Control-Expose-Headers'] = 'Set-Cookie'
 
         return response
-    except ji.JITError, e:
+    except ji.JITError as e:
         return json.loads(e.message)
 
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
                 break
             time.sleep(1)
 
-        print 'Main say bye-bye!'
+        print('Main say bye-bye!')
 
     except:
         logger.error(traceback.format_exc())

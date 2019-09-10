@@ -8,7 +8,7 @@ import getopt
 import json
 import time
 import re
-import Queue
+import queue
 
 from k_line_pump import KLinePump
 from ma_pump import MAPump
@@ -25,7 +25,7 @@ __copyright__ = '(c) 2018 by James Iter.'
 DEPOSITARY_OF_KLINE = dict()
 instrument_id_interval_pattern = re.compile(r'(\D*\d+)_(\d+)\.json')
 contract_code_pattern = re.compile(r'\D*')
-q_macs = Queue.Queue()
+q_macs = queue.Queue()
 
 
 def incept_config():
@@ -37,10 +37,10 @@ def incept_config():
     }
 
     def usage():
-        print "Usage:%s [-s] [--data_source_dir]" % sys.argv[0]
-        print "-s --data_source_dir, is the path of data file directory."
-        print "-g --granularities, default are 2,5,10,30,60 minutes, delimiter is a comma. optional."
-        print "-c --config. optional."
+        print("Usage:%s [-s] [--data_source_dir]" % sys.argv[0])
+        print("-s --data_source_dir, is the path of data file directory.")
+        print("-g --granularities, default are 2,5,10,30,60 minutes, delimiter is a comma. optional.")
+        print("-c --config. optional.")
 
     opts = None
     try:
@@ -48,7 +48,7 @@ def incept_config():
                                    ['help', 'data_source_dir=', 'begin=', 'end=', 'granularities=', 'config=',
                                     'ma_steps=', 'macs='])
     except getopt.GetoptError as e:
-        print str(e)
+        print(str(e))
         usage()
         exit(e.message.__len__())
 
@@ -79,14 +79,14 @@ def incept_config():
             _config['macs'] = v
 
         else:
-            print "unhandled option"
+            print("unhandled option")
 
     if 'config_file' in _config:
         with open(_config['config_file'], 'r') as f:
             _config.update(json.load(f))
 
     if 'data_source_dir' not in _config:
-        print 'Must specify the -s(data_source_dir) arguments.'
+        print('Must specify the -s(data_source_dir) arguments.')
         usage()
         exit(1)
 
@@ -188,19 +188,19 @@ def load_data_from_file(instruments_id=None, granularities=None):
                         DEPOSITARY_OF_KLINE[fields[0]][fields[1]]['MAC'][mac] = dict()
                         DEPOSITARY_OF_KLINE[fields[0]][fields[1]]['MAC'][mac]['data'] = list()
 
-    for k, v in DEPOSITARY_OF_KLINE.items():
+    for k, v in list(DEPOSITARY_OF_KLINE.items()):
 
-        for _k, _v in v.items():
+        for _k, _v in list(v.items()):
             with open(_v['path'], 'r') as f:
                 for line in f:
                     json_k_line = json.loads(line.strip())
                     DEPOSITARY_OF_KLINE[k][_k]['data'].append(json_k_line)
 
-                    for ma_k, ma_v in _v['MA'].items():
+                    for ma_k, ma_v in list(_v['MA'].items()):
                         ma_ret = DEPOSITARY_OF_KLINE[k][_k]['MA'][ma_k]['pump'].process_data(json_k_line)
                         DEPOSITARY_OF_KLINE[k][_k]['MA'][ma_k]['data'].append(ma_ret)
 
-                    for mac_k, mac_v in _v['MAC'].items():
+                    for mac_k, mac_v in list(_v['MAC'].items()):
                         mac = mac_k.lower().split('c')
 
                         data = {
@@ -238,8 +238,8 @@ def load_data_from_file(instruments_id=None, granularities=None):
 
 def init_k_line_pump():
 
-    for k, v in DEPOSITARY_OF_KLINE.items():
-        for _k, _v in v.items():
+    for k, v in list(DEPOSITARY_OF_KLINE.items()):
+        for _k, _v in list(v.items()):
             DEPOSITARY_OF_KLINE[k][_k]['k_line_pump'] = KLinePump()
             DEPOSITARY_OF_KLINE[k][_k]['k_line_pump'].interval = int(_k)
 
@@ -283,7 +283,7 @@ def sewing_data_to_file_and_depositary(depth_market_data=None):
     formatted_depth_market_data['update_time'] = depth_market_data.UpdateTime
     formatted_depth_market_data['instrument_id'] = instrument_id
 
-    if isinstance(depth_market_data.LastPrice, basestring):
+    if isinstance(depth_market_data.LastPrice, str):
         if depth_market_data.LastPrice.isdigit():
             formatted_depth_market_data['last_price'] = int(depth_market_data.LastPrice)
         else:
@@ -311,7 +311,7 @@ def sewing_data_to_file_and_depositary(depth_market_data=None):
             DEPOSITARY_OF_KLINE[instrument_id][str_interval]['k_line_pump'] = KLinePump()
             DEPOSITARY_OF_KLINE[instrument_id][str_interval]['k_line_pump'].interval = interval
 
-    for k, v in DEPOSITARY_OF_KLINE[instrument_id].items():
+    for k, v in list(DEPOSITARY_OF_KLINE[instrument_id].items()):
         DEPOSITARY_OF_KLINE[instrument_id][k]['k_line_pump'].process_data(
             depth_market_data=formatted_depth_market_data, save_path=DEPOSITARY_OF_KLINE[instrument_id][k]['path'])
 
@@ -331,7 +331,7 @@ def sewing_data_to_file_and_depositary(depth_market_data=None):
                         DEPOSITARY_OF_KLINE[instrument_id][k]['MA'][str_step]['pump'] = MAPump(step=step)
                         DEPOSITARY_OF_KLINE[instrument_id][k]['MA'][str_step]['data'] = list()
 
-            for ma_k, ma_v in DEPOSITARY_OF_KLINE[instrument_id][k]['MA'].items():
+            for ma_k, ma_v in list(DEPOSITARY_OF_KLINE[instrument_id][k]['MA'].items()):
                 ma_ret = DEPOSITARY_OF_KLINE[instrument_id][k]['MA'][ma_k]['pump'].process_data(json_k_line)
                 DEPOSITARY_OF_KLINE[instrument_id][k]['MA'][ma_k]['data'].append(ma_ret)
 
@@ -343,7 +343,7 @@ def sewing_data_to_file_and_depositary(depth_market_data=None):
                         DEPOSITARY_OF_KLINE[instrument_id][k]['MAC'][mac] = dict()
                         DEPOSITARY_OF_KLINE[instrument_id][k]['MAC'][mac]['data'] = list()
 
-            for mac_k, mac_v in DEPOSITARY_OF_KLINE[instrument_id][k]['MAC'].items():
+            for mac_k, mac_v in list(DEPOSITARY_OF_KLINE[instrument_id][k]['MAC'].items()):
                 mac = mac_k.lower().split('c')
 
                 data = {

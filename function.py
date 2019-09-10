@@ -47,7 +47,7 @@ def load_data_from_file(instruments_id=None, granularities=None, data_source_dir
             if key not in ret:
                 ret[key] = list()
 
-    for k, v in ret.items():
+    for k, v in list(ret.items()):
         file_path = os.path.join(data_source_dir, k + '.json')
 
         if not os.path.isfile(file_path):
@@ -67,10 +67,10 @@ def load_data_from_server(server_base='http://127.0.0.1', instruments_id=None, g
     j_r = json.loads(r.content)
     bars = j_r['data']
     for j in bars:
-        j[u'open'] = float(j[u'open'])
-        j[u'high'] = float(j[u'high'])
-        j[u'low'] = float(j[u'low'])
-        j[u'close'] = float(j[u'close'])
+        j['open'] = float(j['open'])
+        j['high'] = float(j['high'])
+        j['low'] = float(j['low'])
+        j['close'] = float(j['close'])
 
     return bars
 

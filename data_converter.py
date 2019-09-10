@@ -28,14 +28,14 @@ def incept_config():
     pattern = re.compile(r'\D*')
 
     def usage():
-        print "Usage:%s [-s] [--data_source]" % sys.argv[0]
-        print "-s --data_source, is the path of data file."
-        print "-o --output_dir, is the output directory. optional."
-        print "-n --name, is the instrument id. optional."
-        print "-g --granularities, default are 2,5,10,30,60 minutes, delimiter is a comma. optional."
-        print "-b --begin, default is HOLIDAYS first element, format is YYYY-MM-DD. optional."
-        print "-e --end, default is today, format is YYYY-MM-DD. optional."
-        print "-t --offset, default is 0, unit is second. optional."
+        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print("-s --data_source, is the path of data file.")
+        print("-o --output_dir, is the output directory. optional.")
+        print("-n --name, is the instrument id. optional.")
+        print("-g --granularities, default are 2,5,10,30,60 minutes, delimiter is a comma. optional.")
+        print("-b --begin, default is HOLIDAYS first element, format is YYYY-MM-DD. optional.")
+        print("-e --end, default is today, format is YYYY-MM-DD. optional.")
+        print("-t --offset, default is 0, unit is second. optional.")
 
     opts = None
     try:
@@ -43,7 +43,7 @@ def incept_config():
                                    ['help', 'data_source=', 'output_dir=', 'name=', 'granularities=', 'begin=', 'end=',
                                     'offset='])
     except getopt.GetoptError as e:
-        print str(e)
+        print(str(e))
         usage()
         exit(e.message.__len__())
 
@@ -74,10 +74,10 @@ def incept_config():
             config['offset'] = int(v)
 
         else:
-            print "unhandled option"
+            print("unhandled option")
 
     if 'data_source' not in config:
-        print 'Must specify the -s(data_source) arguments.'
+        print('Must specify the -s(data_source) arguments.')
         usage()
         exit(1)
 
@@ -178,7 +178,7 @@ class DateConverter(object):
                 self.save_path = '/'.join([save_dir_path, file_name])
 
                 if not os.path.isdir(save_dir_path):
-                    os.makedirs(save_dir_path, 0755)
+                    os.makedirs(save_dir_path, 0o755)
 
                 with open(self.save_path, 'a') as f:
                     f.writelines(json.dumps(self.k_line, ensure_ascii=False) + '\n')
@@ -269,7 +269,7 @@ def run():
     for i, line in enumerate(lines):
 
         if i % 10000 == 0:
-            print ' '.join([time.strftime('%H:%M:%S'), i.__str__()])
+            print(' '.join([time.strftime('%H:%M:%S'), i.__str__()]))
 
         depth_market_data = dict()
         row = line.split(',')

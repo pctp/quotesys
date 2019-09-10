@@ -6,7 +6,7 @@ import json
 import jimit as ji
 from mysql.connector import errorcode, errors
 
-from database import Database as db
+from .database import Database as db
 from models import Filter
 
 
@@ -26,17 +26,17 @@ class ORM(object):
 
     def create(self):
         sql_stmt = ("INSERT INTO " + self._table_name + " (" +
-                    ', '.join(filter(lambda _key: _key != self._primary_key, self.__dict__.keys())) +
+                    ', '.join([_key for _key in list(self.__dict__.keys()) if _key != self._primary_key]) +
                     ") VALUES (" +
                     ', '.join(['%({0})s'.format(key)
-                               for key in filter(lambda _key: _key != self._primary_key, self.__dict__.keys())]) + ")")
+                               for key in [_key for _key in list(self.__dict__.keys()) if _key != self._primary_key]]) + ")")
 
         cnx = db.cnxpool.get_connection()
         cursor = cnx.cursor(dictionary=True, buffered=True)
         try:
             cursor.execute(sql_stmt, self.__dict__)
             cnx.commit()
-        except errors.IntegrityError, e:
+        except errors.IntegrityError as e:
             ret = dict()
             if e.errno == errorcode.ER_DUP_ENTRY:
                 ret['state'] = ji.Common.exchange_state(40901)
@@ -62,7 +62,7 @@ class ORM(object):
 
         sql_stmt = ("UPDATE " + self._table_name + " SET " +
                     ', '.join(['{0} = %({0})s'.format(key)
-                               for key in filter(lambda _key: _key != self._primary_key, self.__dict__.keys())]) +
+                               for key in [_key for _key in list(self.__dict__.keys()) if _key != self._primary_key]]) +
                     " WHERE " + '{0} = %({0})s'.format(self._primary_key))
 
         cnx = db.cnxpool.get_connection()
@@ -70,7 +70,7 @@ class ORM(object):
         try:
             cursor.execute(sql_stmt, self.__dict__)
             cnx.commit()
-        except errors.IntegrityError, e:
+        except errors.IntegrityError as e:
             ret = dict()
             if e.errno == errorcode.ER_DUP_ENTRY:
                 ret['state'] = ji.Common.exchange_state(40901)
@@ -105,7 +105,7 @@ class ORM(object):
             cnx.close()
 
     def get(self):
-        sql_stmt = ("SELECT " + ', '.join(self.__dict__.keys()) + " FROM " + self._table_name +
+        sql_stmt = ("SELECT " + ', '.join(list(self.__dict__.keys())) + " FROM " + self._table_name +
                     " WHERE " + '{0} = %({0})s'.format(self._primary_key) +
                     " LIMIT 1")
 
@@ -146,7 +146,7 @@ class ORM(object):
         return False
 
     def get_by(self, field):
-        sql_stmt = ("SELECT " + ', '.join(self.__dict__.keys()) +
+        sql_stmt = ("SELECT " + ', '.join(list(self.__dict__.keys())) +
                     " FROM " + self._table_name + " WHERE " + '{0} = %({0})s'.format(field) + " LIMIT 1")
 
         cnx = db.cnxpool.get_connection()
@@ -238,7 +238,7 @@ class ORM(object):
     def update_by_filter(cls, kv, filter_str=''):
         # 过滤掉不予支持批量更新的字段
         _kv = {}
-        for k, v in kv.iteritems():
+        for k, v in kv.items():
             if k in cls.get_allow_update_keywords():
                 _kv[k] = v
 
@@ -247,7 +247,7 @@ class ORM(object):
 
         # set_str = ', '.join(map(lambda x: x + ' = %(' + x + ')s', _kv.keys()))
         # 上面为通过map实现的方式
-        set_str = ', '.join(['{0} = %({0})s'.format(key) for key in _kv.keys()])
+        set_str = ', '.join(['{0} = %({0})s'.format(key) for key in list(_kv.keys())])
         where_str = Filter.filter_str_to_sql(allow_keywords=cls.get_filter_keywords(), filter_str=filter_str)
         sql_stmt = ("UPDATE " + cls._table_name + " SET " + set_str + " WHERE " + where_str)
 
@@ -290,7 +290,7 @@ class ORM(object):
 
         _kv = dict()
         _kv = _kv.fromkeys(cls.get_allow_content_search_keywords(), '%{0}%'.format(keyword))
-        where_str = ' OR '.join([k + ' LIKE %(' + k + ')s' for k in _kv.keys()])
+        where_str = ' OR '.join([k + ' LIKE %(' + k + ')s' for k in list(_kv.keys())])
         sql_stmt = ("SELECT * FROM " + cls._table_name + " WHERE " + where_str + " ORDER BY " + order_by + " " + order +
                     " LIMIT %(offset)s, %(limit)s")
         sql_stmt_count = ("SELECT count(" + cls._primary_key + ") FROM " + cls._table_name + " WHERE " + where_str)

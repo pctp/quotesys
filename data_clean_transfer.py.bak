@@ -16,16 +16,16 @@ def incept_config():
     pattern = re.compile(r'\D*')
 
     def usage():
-        print "Usage:%s [-s] [--data_source]" % sys.argv[0]
-        print "-s --data_source, is the path of data file."
-        print "-o --output_dir, is the output directory. optional."
+        print("Usage:%s [-s] [--data_source]" % sys.argv[0])
+        print("-s --data_source, is the path of data file.")
+        print("-o --output_dir, is the output directory. optional.")
         
     opts = None
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'hs:o:n:',
                                    ['help', 'data_source=', 'output_dir='])
     except getopt.GetoptError as e:
-        print str(e)
+        print(str(e))
         usage()
         exit(e.message.__len__())
 
@@ -41,10 +41,10 @@ def incept_config():
             config['output_dir'] = v
 
         else:
-            print "unhandled option"
+            print("unhandled option")
 
     if 'data_source' not in config:
-        print 'Must specify the -s(data_source) arguments.'
+        print('Must specify the -s(data_source) arguments.')
         usage()
         exit(1)
 
@@ -169,7 +169,7 @@ with open(filetoclean) as f:
                 outf.write(newrow)
                 continue
             except SyntaxError:
-                print SyntaxError
+                print(SyntaxError)
                 pass
 
         else:

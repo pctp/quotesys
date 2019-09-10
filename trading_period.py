@@ -308,13 +308,13 @@ class TradingPeriod(object):
         assert isinstance(exchange_trading_period_by_ts, dict)
         next_day_exchange_trading_period_by_ts = None
 
-        for k, v in exchange_trading_period.items():
+        for k, v in list(exchange_trading_period.items()):
             if k not in exchange_trading_period_by_ts:
                 exchange_trading_period_by_ts[k] = dict()
 
             assert isinstance(exchange_trading_period[k], dict)
 
-            for k2, v2 in exchange_trading_period[k].items():
+            for k2, v2 in list(exchange_trading_period[k].items()):
                 if k2 not in exchange_trading_period_by_ts[k]:
                     exchange_trading_period_by_ts[k][k2] = list()
 
@@ -366,7 +366,7 @@ class TradingPeriod(object):
 
             if _next_day_exchange_trading_period_by_ts is not None and \
                     isinstance(_next_day_exchange_trading_period_by_ts, dict):
-                for k, v in _next_day_exchange_trading_period_by_ts.items():
+                for k, v in list(_next_day_exchange_trading_period_by_ts.items()):
                     _workdays_exchange_trading_period_by_ts[k] = v
                     _next_day_exchange_trading_period_by_ts = v
 
