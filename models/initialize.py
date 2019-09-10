@@ -14,7 +14,7 @@ import errno
 import importlib
 
 
-importlib.reload(sys)
+#importlib.reload(sys)
 #sys.setdefaultencoding('utf8')
 
 

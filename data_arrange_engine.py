@@ -217,7 +217,7 @@ class DataArrangeEngine(object):
                 contract_code = pattern.match(awp_tick['instrument_id']).group()
                 action_day = awp_tick['action_day']
                 update_time = awp_tick['update_time']
-                # 时间合法性校验
+                # 合法性校验
                 if not trading_time_filter(
                         date_time=' '.join([action_day, update_time]), contract_code=contract_code,
                         exchange_trading_period_by_ts=workdays_exchange_trading_period_by_ts[
@@ -228,6 +228,7 @@ class DataArrangeEngine(object):
 
             except AttributeError as e:
                 logger.error(traceback.format_exc())
+                print('something wrong, wait...')
                 time.sleep(1)
 
                 if db.r is None:
@@ -235,6 +236,7 @@ class DataArrangeEngine(object):
 
             except Exception as e:
                 logger.error(traceback.format_exc())
+                print('something wrong, wait...')
                 time.sleep(1)
 
 
