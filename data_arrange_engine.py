@@ -228,7 +228,7 @@ class DataArrangeEngine(object):
 
             except AttributeError as e:
                 logger.error(traceback.format_exc())
-                print('something wrong, wait...')
+                print('something wrong, wait...', e)
                 time.sleep(1)
 
                 if db.r is None:
@@ -236,7 +236,7 @@ class DataArrangeEngine(object):
 
             except Exception as e:
                 logger.error(traceback.format_exc())
-                print('something wrong, wait...')
+                print('something wrong, wait...', e)
                 time.sleep(1)
 
 

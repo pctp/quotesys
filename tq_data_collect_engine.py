@@ -33,7 +33,7 @@ api = TqApi(acc)
 
 db.init_conn_redis()
 
-inst = ['CZCE.SR001', 'SHFE.rb2001']
+inst = ['CZCE.SR001', 'SHFE.rb2001','DCE.pp2001']
 
 q_depth_market_data = queue.Queue()
 
@@ -55,8 +55,8 @@ while True:
 
 
 
-            InstrumentID = q
-            ActionDay = tick.datetime.split(' ')[0]
+            InstrumentID = q.split('.')[1]
+            ActionDay = tick.datetime.split(' ')[0].replace('-', '')
             UpdateTime = tick.datetime.split(' ')[1]
             LastPrice = tick.last_price
             Volume = tick.volume
@@ -78,43 +78,3 @@ while True:
             # print(type(quotenow))
             # print(quotenow['datetme'])
 
-
-def login():
-    print('行情服务器登录成功')
-
-    while True:
-
-        api.wait_update()
-
-        if api.ischange():
-            pass
-
-        if Utils.exit_flag:
-            msg = 'Thread CTPDataCollectEngine say bye-bye'
-            print(msg)
-            logger.info(msg=msg)
-
-            return
-
-        try:
-            payload = q_depth_market_data.get(timeout=1)
-            q_depth_market_data.task_done()
-
-            awp_tick = {
-                'granularities': granularities,
-                'instrument_id': payload.InstrumentID,
-                'last_price': payload.LastPrice,
-                'action_day': payload.ActionDay,
-                'update_time': payload.UpdateTime.replace(':', ''),
-                'volume': payload.Volume
-            }
-
-            print(awp_tick)
-            # db.r.rpush(app.config['data_stream_queue'], json.dumps(awp_tick, ensure_ascii=False))
-
-        except queue.Empty as e:
-            pass
-
-
-if __name__ == "__main__":
-    login()
