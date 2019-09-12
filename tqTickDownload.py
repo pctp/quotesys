@@ -94,10 +94,10 @@ def main():
     # 下载从 2018-05-01 到 2018-07-01 的 T1809 盘口Tick数据
     td = DataDownloader(api, symbol_list=[instid], dur_sec=0,
                         start_dt=stdt, end_dt=eddt, csv_file_name=tickfile)
-
-    while not td.is_finished():
-        api.wait_update()
-        print(("progress:  tick:%.2f%%" % td.get_progress()))
+    with closing(api):
+    	while not td.is_finished():
+        	api.wait_update()
+        	print(("progress:  tick:%.2f%%" % td.get_progress()))
 
 
 if __name__ == "__main__":
