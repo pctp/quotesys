@@ -1,4 +1,7 @@
 *.csv
 *.pyc
 *.bak
+*.log
+*.old
+
 
